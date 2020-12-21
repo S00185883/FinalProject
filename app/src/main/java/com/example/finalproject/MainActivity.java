@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button bRed, bBlue, bYellow, bGreen, fb;
+    Button bRed, bBlue, bOrange, bGreen, fb;
     int sequenceCount = 4, n = 0;
     private Object mutex = new Object();
 
@@ -23,9 +23,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         bRed = findViewById(R.id.bRed);
         bBlue = findViewById(R.id.bBlue);
-        bYellow = findViewById(R.id.bOrange);
+        bOrange = findViewById(R.id.bOrange);
         bGreen = findViewById(R.id.bGreen);
         DatabaseHandler db = new DatabaseHandler(this);
 
@@ -132,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                             flashButton(bRed);
                             break;
                         case 3:
-                            flashButton(bYellow);
+                            flashButton(bOrange);
                             break;
                         case 4:
                             flashButton(bGreen);
@@ -186,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
             else if (x == 2)
                 flashButton(bRed);
             else if (x == 3)
-                flashButton(bYellow);
+                flashButton(bOrange);
             else if (x == 4)
                 flashButton(bGreen);
         }
