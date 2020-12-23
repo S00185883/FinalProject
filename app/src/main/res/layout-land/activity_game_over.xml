@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#8C878E"
     tools:context=".GameOverActivity">
 
     <Button
@@ -42,7 +43,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Game Over"
-        android:textSize="30sp"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintHorizontal_bias="0.505"
@@ -55,7 +57,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Your Score was "
-        tools:layout_editor_absoluteX="217dp"
-        tools:layout_editor_absoluteY="186dp" />
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
