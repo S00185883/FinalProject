@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/style_circular_button_blue"
         android:text="Blue"
-        app:layout_constraintBottom_toTopOf="@+id/bOrange"
+        app:layout_constraintBottom_toTopOf="@+id/bYellow"
         app:layout_constraintEnd_toStartOf="@+id/bGreen"
         app:layout_constraintHorizontal_bias="0.277"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/style_circular_button_green"
         android:text="Green"
-        app:layout_constraintBottom_toTopOf="@+id/bOrange"
+        app:layout_constraintBottom_toTopOf="@+id/bYellow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.883"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,11 +59,11 @@
         app:layout_constraintVertical_bias="0.38" />
 
     <Button
-        android:id="@+id/bOrange"
+        android:id="@+id/bYellow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="266dp"
-        android:background="@drawable/style_circular_button_orange"
+        android:background="@drawable/style_circular_button_yellow"
         android:text="Orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

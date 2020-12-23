@@ -2,193 +2,266 @@ package com.example.finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-import java.util.ArrayList;
 
+public class StartGameActivity extends AppCompatActivity implements SensorEventListener {
 
-public class StartGameActivity extends AppCompatActivity {
+  int[] gameSequence = new int[120];
+  private final int yellow = 1;
+  private final int red = 2;
+  private final int blue = 3;
+  private final int green = 4;
+  private SensorManager mSensorManager;
+  private Sensor mSensor;
+
+  int num = 0, usequence = -1, score = 0, count, round = 1;
+
+  private final double NORTH_MOVE_FORWARD = 6;     // upper mag limit
+  private final double NORTH_MOVE_BACKWARD = 9;      // lower mag limit
+
+  private final double SOUTH_MOVE_FORWARD = 2;     // upper mag limit
+  private final double SOUTH_MOVE_BACKWARD = 5;      // lower mag limit
+
+  private final double EAST_MOVE_FORWARD = 1;     // upper mag limit
+  private final double EAST_MOVE_BACKWARD = 0;      // lower mag limit
+
+  private final double WEST_MOVE_FORWARD = 1;     // upper mag limit
+  private final double WEST_MOVE_BACKWARD = 0;      // lower mag limit
+
+  boolean highLimitNorth = false;      // detect high limit
+  boolean highLimitSouth = false;      // detect high limit
+  boolean highLimitEast = false;      // detect high limit
+  boolean highLimitWest = false;      // detect high limit
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    // TODO Auto-generated method stub
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_start_game);
-    b1 = (Button) findViewById(R.id.btnFirst);
-    b2 = (Button) findViewById(R.id.btnSecond);
-    b3 = (Button) findViewById(R.id.btnThird);
-    b4 = (Button) findViewById(R.id.btnFourth);
-    b5 = (Button) findViewById(R.id.button5);
-
+    mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+    mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    gameSequence = getIntent().getIntArrayExtra("sequence");
+    round = getIntent().getIntExtra("round", 1);
+    score = getIntent().getIntExtra("score", 1);
+    count = getIntent().getIntExtra("count", 3);
 
   }
 
+  public void doClick(View view){
+    score++;
+    usequence++;
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-
-    int id = item.getItemId();
-
-    if (id == R.id.action_settings) {
-      return true;
+    switch (view.getId())
+    {
+      case(R.id.bRed) :
+        num = 2;
+        break;
+      case(R.id.bYellow) :
+        num = 1;
+        break;
+      case(R.id.bGreen) :
+        num = 4;
+        break;
+      case(R.id.bBlue) :
+        num = 3;
+        break;
     }
 
-    return super.onOptionsItemSelected(item);
-  }
+    for( int i : gameSequence)
+    {
+      if(num == gameSequence[usequence])
+      {
 
+          round++;
+          Intent mainIntent = new Intent(this, MainActivity.class);
+          mainIntent.putExtra("score", score);
+          mainIntent.putExtra("round", round);
+          mainIntent.putExtra("counter", count);
+          startActivity(mainIntent);
 
+        return;
 
-  int counter=1;
-  int level=0;
-  int levelcounter=0;
-  Button b1,b2,b3, b4,b5;
-  Handler handler = new Handler();
-  Handler handler2 = new Handler();
-  ArrayList<Integer> game_sequence =new ArrayList<>(4);
-  ArrayList<Integer> player_sequence =new ArrayList<>(4);
+      }
+      else if(num != gameSequence[usequence])
+      {
+        score=0;
+        Intent gameOverActivity = new Intent(view.getContext(), GameOverActivity.class);
+        gameOverActivity.putExtra("score", score);
+        gameOverActivity.putExtra("round", round);
 
-  int time = 1000;
-
-  public void check(){
-    final Toast txtlooser = Toast.makeText(getApplicationContext(), "You lost", Toast.LENGTH_SHORT);
-
-    if (game_sequence.size() == player_sequence.size()) {//if the size of the two is equal
-      for (int i = 0; i < game_sequence.size(); i++) {//go through the array
-        if (game_sequence.get(i).equals(player_sequence.get(i))) {//check they are the same
-          popup();
-          levelcounter=level;
-        } else {
-
-          Intent showGameOver = new Intent(this, GameOverActivity.class);
-          showGameOver.putExtra("score", levelcounter);
-          startActivity(showGameOver);
-          game_sequence.clear();//reset the arrays
-          player_sequence.clear();
-          txtlooser.show(); //if you fail show message
-          level=0;//restart the level
-
-        }
+        startActivity(gameOverActivity);
+        return;
       }
     }
   }
-
-  public void sequence() {
-    b1.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        b1.setBackgroundColor(Color.parseColor("#FFEA4D39"));
-        stop();
-        player_sequence.add(1);
-        check();
-      }
-    });
-    b3.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        b3.setBackgroundColor(Color.parseColor("#FF73FF0E"));
-        stop();
-        player_sequence.add(2);
-        check();
-      }
-    });
-    b3.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        b3.setBackgroundColor(Color.parseColor("#FFF2D200"));
-        stop();
-        player_sequence.add(3);
-        check();
-      }
-    });
-    b4.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        b4.setBackgroundColor(Color.parseColor("#FF02AAFF"));
-        stop();
-        player_sequence.add(4);
-        check();
-      }
-    });
+  protected void onResume() {
+    super.onResume();
+    mSensorManager.registerListener(this, mSensor,
+            SensorManager.SENSOR_DELAY_NORMAL);
   }
-  public void stop() {
-    handler.postDelayed(new Runnable() {//apagamos los botones
-      @Override
-      public void run() {
-        b1.setBackgroundColor(Color.parseColor("#FF560A00"));
-        b2.setBackgroundColor(Color.parseColor("#FF005000"));
-        b3.setBackgroundColor(Color.parseColor("#FF705B00"));
-        b4.setBackgroundColor(Color.parseColor("#FF00476B"));
-      }
-    },  150);//wait to turn on and turn off
+  protected void onPause() {
+    super.onPause();
+    mSensorManager.unregisterListener(this);
   }
-  // }
-  public void game(View game) throws InterruptedException {//we must always pass a view so that it recognizes it in the content
-    level++;
-    game(level);//we increase the level as we progress
-    b5.setText(" ");
-  }
+  @Override
+  public void onSensorChanged(SensorEvent event) {
+    float x = event.values[0];
+    float y = event.values[1];
+    float z = event.values[2];
+    final Button northBtn = findViewById(R.id.bYellow);
+    final Button southBtn = findViewById(R.id.bBlue);
+    final Button eastBtn = findViewById(R.id.bGreen);
+    final Button westBtn = findViewById(R.id.bRed);
+    if ((x > NORTH_MOVE_FORWARD && z > 0) && (highLimitNorth == false)) {
+      highLimitNorth = true;
+    }
+    if ((x < NORTH_MOVE_BACKWARD && z > 0) && (highLimitNorth == true)) {
+      // we have a tilt to the NORTH
+      highLimitNorth = false;
 
-  public void popup() {
-    //we show the message in the start button
-    TextView txtPuntos = (TextView) findViewById(R.id.button5);
-    txtPuntos.setText("Level: " +level+" passed  \n Press again \n when you are ready");
-  }
-  public void game(int level) throws InterruptedException {// game execution
-    this.level=level;
-    for (int i = 0; i < level; i++) {//increases difficulty
-
-      handler2.postDelayed(new Runnable() {
-        @Override
-
+      Handler handler = new Handler();
+      Runnable r = new Runnable() {
         public void run() {
 
-          int random = (int) Math.floor(Math.random() * 4 + 1);
+          northBtn.setPressed(true);
+          northBtn.invalidate();
+          northBtn.performClick();
+          Handler handler1 = new Handler();
+          Runnable r1 = new Runnable() {
+            public void run() {
+              northBtn.setPressed(false);
+              northBtn.invalidate();
+            }
+          };
+          handler1.postDelayed(r1, 600);
 
-          if (random == 1) {
+        } // end runnable
+      };
+      handler.postDelayed(r, 600);
 
-            game_sequence.add(1);
-            b1.setBackgroundColor(Color.parseColor("#FFEA4D39"));
-            stop();
-          } else if (random == 2) {
 
-            game_sequence.add(2);
-            b2.setBackgroundColor(Color.parseColor("#FF73FF0E"));
-            stop();
-          } else if (random == 3) {
-            game_sequence.add(3);
-            b3.setBackgroundColor(Color.parseColor("#FFF2D200"));
-            stop();
-          } else if (random == 4) {
-
-            game_sequence.add(4);
-            b4.setBackgroundColor(Color.parseColor("#FF02AAFF"));
-            stop();
-          }
-          final Toast txtlooser = Toast.makeText(getApplicationContext(), "Your go", Toast.LENGTH_SHORT);
-        }
-      }, time * i + 30); //increases the waiting time for each button and illuminates
     }
-    sequence();//we call the player's keystrokes to proceed to the comparison
-    final Toast txtlooser = Toast.makeText(getApplicationContext(), "Your go", Toast.LENGTH_SHORT);
+
+    // South Movement
+    if ((x < SOUTH_MOVE_FORWARD && z < 0) && (highLimitSouth == false)) {
+      highLimitSouth = true;
+    }
+    if ((x > SOUTH_MOVE_BACKWARD && z < 0) && (highLimitSouth == true)) {
+      highLimitSouth = false;
+
+
+      Handler handler = new Handler();
+      Runnable r = new Runnable() {
+        public void run() {
+
+          southBtn.setPressed(true);
+          southBtn.invalidate();
+          southBtn.performClick();
+          Handler handler1 = new Handler();
+          Runnable r1 = new Runnable() {
+            public void run() {
+              southBtn.setPressed(false);
+              southBtn.invalidate();
+            }
+          };
+          handler1.postDelayed(r1, 600);
+
+        } // end runnable
+      };
+      handler.postDelayed(r, 600);
+
+
+    }
+
+    // East Movement
+    if (y > EAST_MOVE_FORWARD && highLimitEast == false) {
+      highLimitEast = true;
+    }
+    if (y < EAST_MOVE_BACKWARD && highLimitEast == true) {
+      // we have a tilt to the EAST
+      highLimitEast = false;
+
+
+      Handler handler = new Handler();
+      Runnable r = new Runnable() {
+        public void run() {
+
+          eastBtn.setPressed(true);
+          eastBtn.invalidate();
+          eastBtn.performClick();
+          Handler handler1 = new Handler();
+          Runnable r1 = new Runnable() {
+            public void run() {
+              eastBtn.setPressed(false);
+              eastBtn.invalidate();
+            }
+          };
+          handler1.postDelayed(r1, 600);
+
+        }
+      };
+      handler.postDelayed(r, 600);
+
+
+    }
+
+    if (y < WEST_MOVE_FORWARD && highLimitWest == false) {
+      highLimitWest = true;
+    }
+    if (y > WEST_MOVE_BACKWARD && highLimitWest == true) {
+      highLimitWest = false;
+
+
+      Handler handler = new Handler();
+      Runnable r = new Runnable() {
+        public void run() {
+
+          westBtn.setPressed(true);
+          westBtn.invalidate();
+          westBtn.performClick();
+          Handler handler1 = new Handler();
+          Runnable r1 = new Runnable() {
+            public void run() {
+              westBtn.setPressed(false);
+              westBtn.invalidate();
+            }
+          };
+          handler1.postDelayed(r1, 600);
+
+        } // end runnable
+      };
+      handler.postDelayed(r, 600);
+
+
+    }
 
   }
+
+
+  @Override
+  public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    // not used
+  }
+
+  public static double round(double value, int places) {
+    if (places < 0) throw new IllegalArgumentException();
+
+    long factor = (long) Math.pow(10, places);
+    value = value * factor;
+    long tmp = Math.round(value);
+    return (double) tmp / factor;
+  }
+
 
 
 }
-
-

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,7 +22,7 @@ public class HiScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hi_score);
 
-        listView = findViewById(R.id.lvShowData);
+        listView = findViewById(R.id.lvHighScore);
 
         newDb = new DatabaseHandler(this);
 

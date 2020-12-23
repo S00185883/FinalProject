@@ -39,17 +39,17 @@
         android:background="@drawable/style_circular_button_green"
         android:text="Green"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bOrange"
+        app:layout_constraintEnd_toStartOf="@+id/bYellow"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/bRed"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.371" />
 
     <Button
-        android:id="@+id/bOrange"
+        android:id="@+id/bYellow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/style_circular_button_orange"
+        android:background="@drawable/style_circular_button_yellow"
         android:text="Orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
